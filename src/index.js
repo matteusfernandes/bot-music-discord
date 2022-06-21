@@ -12,7 +12,6 @@ const client = new Discord.Client({
 const fs = require('fs');
 const config = require('./config.json');
 const { SpotifyPlugin } = require('@distube/spotify');
-const { SoundCloudPlugin } = require('@distube/soundcloud');
 const { YtDlpPlugin } = require('@distube/yt-dlp');
 
 module.exports = () => {
@@ -31,8 +30,7 @@ module.exports = () => {
       new SpotifyPlugin({
         emitEventsAfterFetching: true
       }),
-      new SoundCloudPlugin(),
-      new YtDlpPlugin()
+      new YtDlpPlugin(),
     ],
     youtubeDL: false
   });
@@ -40,6 +38,19 @@ module.exports = () => {
   client.commands = new Discord.Collection();
   client.aliases = new Discord.Collection();
   client.emotes = config.emoji;
+
+  fs.readdir('./src/commands/', (err, files) => {
+    if (err) console.log('Could not find any commands!');
+
+    const jsFiles = files.filter(f => f.split('.').pop() === 'js');
+    if (jsFiles.length <= 0) console.log('Could not find any commands!');
+    jsFiles.forEach(file => {
+      const cmd = require(`./commands/${file}`);
+      console.log(`Loaded ${file}`);
+      client.commands.set(cmd.name, cmd);
+      if (cmd.aliases) cmd.aliases.forEach(alias => client.aliases.set(alias, cmd.name));
+    });
+  });
 
   client.login(process.env.DISCORD_TOKEN);
 }
