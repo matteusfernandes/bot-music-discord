@@ -4,8 +4,8 @@ module.exports = {
   inVoiceChannel: true,
   run: async (client, message) => {
     const queue = client.distube.getQueue(message);
-    if (!queue) return message.channel.send(`${client.emotes.error} | A fila está vazia!`);
-    if (queue.pause) {
+    if (!queue) message.channel.send(`${client.emotes.error} | A fila está vazia!`);
+    if (queue.paused) {
       queue.resume();
       return message.channel.send('Continuando a música :)');
     }
