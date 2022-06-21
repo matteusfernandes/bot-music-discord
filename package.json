@@ -1,0 +1,47 @@
+{
+  "name": "music-bot",
+  "version": "1.0.0",
+  "description": "Bot for play music in Discord",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node .",
+    "dev": "nodemon .",
+    "lint": "eslint --no-inline-config --no-error-on-unmatched-pattern -c .eslintrc.json ."
+  },
+  "engines": {
+    "node": "16.14.0",
+    "npm": "8.3.1"
+  },
+  "dependencies": {
+    "@discordjs/builders": "^0.12.0",
+    "@discordjs/rest": "^0.3.0",
+    "discord-api-types": "^0.27.2",
+    "discord.js": "^13.6.0",
+    "dotenv": "^16.0.0",
+    "eslint-config-trybe-backend": "^1.0.4",
+    "node": "^17.4.0",
+    "@discordjs/opus": "^0.7.0",
+    "@discordjs/voice": "^0.8.0",
+    "@distube/spotify": "^1.2.1",
+    "@distube/yt-dlp": "^0.0.2",
+    "distube": "^3.3.1",
+    "libsodium-wrappers": "^0.7.9"
+  },
+  "devDependencies": {
+    "eslint": "^8.9.0",
+    "eslint-plugin-sonarjs": "^0.12.0",
+    "nodemon": "^2.0.15"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/matteusfernandes/bot-music-discord"
+  },
+  "keywords": [],
+  "author": "Matteus Fernandes",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/matteusfernandes/bot-music-discord"
+  },
+  "homepage": "https://github.com/matteusfernandes/bot-music-discord#readme"
+}
