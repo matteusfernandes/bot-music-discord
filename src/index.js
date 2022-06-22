@@ -58,6 +58,13 @@ module.exports = () => {
     const prefix = config.prefix;
     if (!message.content.startsWith(prefix)) return;
 
+    const correctChannel = config.idMusicChannel;
+    if (message.channelId !== correctChannel) {
+      message.delete(message.id);
+      message.channel.send(`${client.emotes.error} | Canal errado! Tente em <#${correctChannel}>!`);
+      return;
+    }
+
     const args = message.content.slice(prefix.length).trim().split(/ +/g);
     const command = args.shift().toLowerCase();
     const cmd = client.commands.get(command) || client.commands.get(client.aliases.get(command));
@@ -72,6 +79,41 @@ module.exports = () => {
       message.channel.send(`${client.emotes.error} | Error: \`${e}\``);
     }
   });
+
+  const status = queue =>
+  `Volume: \`${queue.volume}%\` | Filtro: \`${queue.filters.join(', ') || 'Off'}\` | Repetir: \`${
+    queue.repeatMode ? (queue.repeatMode === 2 ? 'All Queue' : 'This Song') : 'Off'
+  }\` | Autoplay: \`${queue.autoplay ? 'On' : 'Off'}\``;
+
+client.distube
+  .on('playSong', (queue, song) =>
+    queue.textChannel.send(
+      `${client.emotes.play} | Tocando \`${song.name}\` - \`${song.formattedDuration}\`\nAdicionada por: ${
+        song.user
+      }\n${status(queue)}`
+    ),
+  )
+  .on('addSong', (queue, song) =>
+    queue.textChannel.send(
+      `${client.emotes.success} | Adicionada ${song.name} - \`${song.formattedDuration}\` na fila por ${song.user}`
+    )
+  )
+  .on('addList', (queue, playlist) =>
+    queue.textChannel.send(
+      `${client.emotes.success} | Adicionada \`${playlist.name}\` playlist (${
+        playlist.songs.length
+      } músicas) na fila\n${status(queue)}`
+    )
+  )
+  .on('error', (channel, e) => {
+    channel.send(`${client.emotes.error} | Ocorreu um erro: ${e.toString().slice(0, 1974)}`)
+    console.error(e)
+  })
+  .on('empty', channel => channel.send('Canal de voz vazio! Saindo do canal...'))
+  .on('searchNoResult', (message, query) =>
+    message.channel.send(`${client.emotes.error} | Nenhum resultado encontrado \`${query}\`!`)
+  )
+  .on('finish', queue => queue.textChannel.send('Finalizando!'));
 
   client.login(process.env.DISCORD_TOKEN);
 }
