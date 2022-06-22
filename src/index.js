@@ -80,7 +80,7 @@ module.exports = () => {
     try {
       cmd.run(client, message, args);
     } catch (e) {
-      logChannel.send(e);
+      logChannel.send(`${client.emotes.error} | Error: \`${e}\``);
       message.channel.send(`${client.emotes.error} | Error: \`${e}\``);
     }
   });
@@ -111,8 +111,8 @@ client.distube
     )
   )
   .on('error', (channel, e) => {
-    channel.send(`${client.emotes.error} | Ocorreu um erro: ${e.toString().slice(0, 1974)}`)
-    logChannel.send(e)
+    channel.send(`${client.emotes.error} | Ocorreu um erro: ${e.toString().slice(0, 1974)}`);
+    logChannel.send(`${client.emotes.error} | Error: \`${e.message}\``);
   })
   .on('empty', channel => channel.send('Canal de voz vazio! Saindo do canal...'))
   .on('searchNoResult', (message, query) =>

@@ -27,7 +27,8 @@
     "eslint-config-trybe-backend": "^1.0.4",
     "ffmpeg-static": "^4.4.1",
     "libsodium-wrappers": "^0.7.9",
-    "node": "^17.4.0"
+    "node": "^17.4.0",
+    "opusscript": "^0.0.8"
   },
   "devDependencies": {
     "eslint": "^8.9.0",
