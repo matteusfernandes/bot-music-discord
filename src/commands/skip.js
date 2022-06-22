@@ -1,3 +1,5 @@
+const config = require('../config.json');
+
 module.exports = {
   name: 'skip',
   inVoiceChannel: true,
@@ -8,7 +10,9 @@ module.exports = {
       const song = await queue.skip();
       message.channel.send(`${client.emotes.success} | Skipped! Tocando agora:\n${song.name}`);
     } catch (e) {
-      message.channel.send(`${client.emotes.error} | ${e}`);
+      client.channels.fetch(config.idLogErrorChannel)
+      .then((chn) => chn.send(`${client.emotes.error} | ${e}`));
+      message.channel.send('Não existe música para pular!');
     }
   }
 };

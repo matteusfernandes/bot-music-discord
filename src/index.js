@@ -15,8 +15,13 @@ const { SpotifyPlugin } = require('@distube/spotify');
 const { YtDlpPlugin } = require('@distube/yt-dlp');
 
 module.exports = () => {
-  client.on('ready', () => {
-    console.log(`${client.user.tag} está pronto para cantar!`)
+  let logChannel;
+
+  client.on('ready', async () => {
+    console.log(`${client.user.tag} está pronto para cantar!`);
+
+    logChannel = await client.channels.fetch(config.idLogErrorChannel);
+    logChannel.send(`${client.user.tag} está pronto para cantar!`);
   });
 
   client.config = require('./config.json');
@@ -40,10 +45,10 @@ module.exports = () => {
   client.emotes = config.emoji;
 
   fs.readdir('./src/commands/', (err, files) => {
-    if (err) console.log('Could not find any commands!');
+    if (err) logChannel.send('Could not find any commands!');
 
     const jsFiles = files.filter(f => f.split('.').pop() === 'js');
-    if (jsFiles.length <= 0) console.log('Could not find any commands!');
+    if (jsFiles.length <= 0) logChannel.send('Could not find any commands!');
     jsFiles.forEach(file => {
       const cmd = require(`./commands/${file}`);
       console.log(`Loaded ${file}`);
@@ -75,7 +80,7 @@ module.exports = () => {
     try {
       cmd.run(client, message, args);
     } catch (e) {
-      console.error(e);
+      logChannel.send(e);
       message.channel.send(`${client.emotes.error} | Error: \`${e}\``);
     }
   });
@@ -107,7 +112,7 @@ client.distube
   )
   .on('error', (channel, e) => {
     channel.send(`${client.emotes.error} | Ocorreu um erro: ${e.toString().slice(0, 1974)}`)
-    console.error(e)
+    logChannel.send(e)
   })
   .on('empty', channel => channel.send('Canal de voz vazio! Saindo do canal...'))
   .on('searchNoResult', (message, query) =>

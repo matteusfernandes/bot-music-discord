@@ -1,5 +1,6 @@
 {
   "idMusicChannel":"980150302953050142",
+  "idLogErrorChannel": "989048363695611914",
   "prefix": "!",
   "emoji": {
     "play": "▶️",
